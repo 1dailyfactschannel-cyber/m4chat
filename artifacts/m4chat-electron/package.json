@@ -1,0 +1,40 @@
+{
+  "name": "m4chat-electron",
+  "version": "1.0.0",
+  "description": "m4chat desktop application",
+  "main": "./out/main/index.js",
+  "author": "you",
+  "homepage": "https://github.com/you/m4chat-electron",
+  "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "postinstall": "electron-builder install-app-deps",
+    "build:win": "npm run build && electron-builder --win --config",
+    "build:mac": "npm run build && electron-builder --mac --config",
+    "build:linux": "npm run build && electron-builder --linux --config"
+  },
+  "dependencies": {
+    "@electron-toolkit/preload": "^3.0.1",
+    "@electron-toolkit/utils": "^3.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "lucide-react": "^0.545.0",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.1",
+    "class-variance-authority": "^0.7.1"
+  },
+  "devDependencies": {
+    "@electron/notarize": "^2.5.0",
+    "@types/node": "^20.14.9",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitejs/plugin-react": "^4.3.1",
+    "@tailwindcss/vite": "^4.1.14",
+    "electron": "^31.1.0",
+    "electron-builder": "^24.13.3",
+    "electron-vite": "^2.3.0",
+    "typescript": "^5.5.2",
+    "vite": "^5.3.1"
+  }
+}

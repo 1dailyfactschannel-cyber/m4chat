@@ -1,0 +1,51 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: m4chat-postgres
+    environment:
+      POSTGRES_DB: m4chat
+      POSTGRES_USER: m4chat
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-m4chat_secret}
+    ports:
+      - "5531:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U m4chat"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api-server:
+    build:
+      context: .
+      dockerfile: artifacts/api-server/Dockerfile
+    container_name: m4chat-api
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-3001}
+      - DATABASE_URL=postgresql://m4chat:${POSTGRES_PASSWORD:-m4chat_secret}@postgres:5432/m4chat
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .
+      dockerfile: artifacts/mockup-sandbox/Dockerfile
+    container_name: m4chat-frontend
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${FRONTEND_PORT:-8081}
+      - VITE_API_URL=${VITE_API_URL:-http://api-server:3001}
+    ports:
+      - "8081:8081"
+    depends_on:
+      - api-server
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
