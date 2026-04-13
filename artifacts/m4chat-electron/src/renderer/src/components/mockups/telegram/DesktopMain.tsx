@@ -6,6 +6,8 @@ import {
   Moon, Sun, Image, ChevronRight, Info, MoreVertical, Check,
   UserCheck, Mail, Hash, Clock, Camera, Menu
 } from 'lucide-react';
+import { ProfilePanel } from './ProfilePanel';
+import { useUserStore } from '../../../store/userStore';
 
 type Reaction = { emoji: string; count: number; mine: boolean };
 type Message = {
@@ -284,7 +286,9 @@ export function DesktopMain() {
           >
             {d ? <Sun className="w-5 h-5"/> : <Moon className="w-5 h-5"/>}
           </button>
-          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm cursor-pointer">JD</div>
+          <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white font-semibold text-sm cursor-pointer"
+            onClick={() => useUserStore.getState().openProfile()}
+          >JD</div>
         </div>
       </div>
 
@@ -740,6 +744,9 @@ export function DesktopMain() {
           </div>
         </div>
       )}
+      
+      {/* Profile Panel */}
+      <ProfilePanel />
     </div>
   );
 }
