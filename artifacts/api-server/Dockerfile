@@ -1,18 +1,19 @@
-FROM node:22-alpine AS deps
-WORKDIR /app
-COPY artifacts/api-server/package.json pnpm-workspace.yaml ./
-COPY lib/db/package.json lib/db/package.json
-COPY lib/api-zod/package.json lib/api-zod/package.json
-COPY lib/api-client-react/package.json lib/api-client-react/package.json
-COPY lib/db/drizzle.config.ts lib/db/drizzle.config.ts
-RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter @workspace/api-server...
-
 FROM node:22-alpine AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+
+# Copy workspace files
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY lib lib/
+COPY artifacts artifacts/
+
+# Install dependencies
+RUN npm install -g pnpm && \
+    pnpm install --no-frozen-lockfile
+
+# Build
 RUN pnpm run build
 
+# Runner stage
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
