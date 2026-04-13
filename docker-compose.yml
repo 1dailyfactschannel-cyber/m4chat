@@ -20,6 +20,8 @@ services:
     build:
       context: .
       dockerfile: artifacts/api-server/Dockerfile
+      no_cache: true
+    image: m4chat/api-server:latest
     container_name: m4chat-api
     environment:
       - NODE_ENV=${NODE_ENV:-production}
@@ -36,6 +38,8 @@ services:
     build:
       context: .
       dockerfile: artifacts/mockup-sandbox/Dockerfile
+      no_cache: true
+    image: m4chat/frontend:latest
     container_name: m4chat-frontend
     environment:
       - NODE_ENV=${NODE_ENV:-production}
