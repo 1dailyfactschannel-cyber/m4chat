@@ -1,16 +1,15 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy workspace files
-COPY package.json pnpm-workspace.yaml ./
-COPY artifacts/mockup-sandbox ./artifacts/mockup-sandbox/
+# Copy all project files
+COPY . .
 
-# Install dependencies without lock file
+# Install all dependencies
 RUN npm install -g pnpm && \
-    pnpm install --no-lockfile
+    pnpm install
 
-# Build
-RUN pnpm run build --filter @workspace/mockup-sandbox
+# Build only mockup-sandbox
+RUN pnpm --filter @workspace/mockup-sandbox run build
 
 # Runner stage
 FROM node:22-alpine AS runner
