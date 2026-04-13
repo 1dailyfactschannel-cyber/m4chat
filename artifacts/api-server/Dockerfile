@@ -2,13 +2,13 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copy workspace files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-workspace.yaml ./
 COPY lib lib/
 COPY artifacts artifacts/
 
-# Install dependencies
+# Install dependencies without lock file
 RUN npm install -g pnpm && \
-    pnpm install --no-frozen-lockfile
+    pnpm install --no-lockfile
 
 # Build
 RUN pnpm run build

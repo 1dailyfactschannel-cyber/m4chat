@@ -2,12 +2,12 @@ FROM node:22-alpine AS builder
 WORKDIR /app
 
 # Copy workspace files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY package.json pnpm-workspace.yaml ./
 COPY artifacts/mockup-sandbox ./artifacts/mockup-sandbox/
 
-# Install dependencies
+# Install dependencies without lock file
 RUN npm install -g pnpm && \
-    pnpm install --no-frozen-lockfile
+    pnpm install --no-lockfile
 
 # Build
 RUN pnpm run build --filter @workspace/mockup-sandbox
