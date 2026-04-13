@@ -1,7 +1,11 @@
 FROM node:22-alpine AS deps
 WORKDIR /app
-COPY artifacts/api-server/package.json artifacts/api-server/pnpm-lock.yaml pnpm-workspace.yaml ./
-RUN npm install -g pnpm && pnpm install --frozen-lockfile --filter @workspace/api-server --filter @workspace/db
+COPY artifacts/api-server/package.json pnpm-workspace.yaml ./
+COPY lib/db/package.json lib/db/package.json
+COPY lib/api-zod/package.json lib/api-zod/package.json
+COPY lib/api-client-react/package.json lib/api-client-react/package.json
+COPY lib/db/drizzle.config.ts lib/db/drizzle.config.ts
+RUN npm install -g pnpm && pnpm install --no-frozen-lockfile --filter @workspace/api-server...
 
 FROM node:22-alpine AS builder
 WORKDIR /app
@@ -12,11 +16,9 @@ RUN pnpm run build
 FROM node:22-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nodejs
+RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nodejs
 COPY --from=builder /app/artifacts/api-server/dist ./dist
 COPY --from=builder /app/artifacts/api-server/package.json ./package.json
-COPY --from=builder /app/artifacts/api-server/dist/package.json ./package.json 2>/dev/null || true
 USER nodejs
 EXPOSE 3001
 CMD ["node", "dist/index.mjs"]
