@@ -4,7 +4,7 @@ WORKDIR /app
 # Copy entire project
 COPY . .
 
-# Try to install and build
+# Install and build
 RUN npm install -g pnpm && \
     pnpm install && \
     pnpm run build

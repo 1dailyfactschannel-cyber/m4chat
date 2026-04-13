@@ -1,23 +1,13 @@
 FROM node:22-alpine AS builder
-WORKDIR /app/artifacts/mockup-sandbox
+WORKDIR /app
 
-# Copy package files
-COPY artifacts/mockup-sandbox/package.json ./
+# Copy entire project
+COPY . .
 
-# Install dependencies
+# Install and build
 RUN npm install -g pnpm && \
-    pnpm install --no-frozen-lockfile
-
-# Copy source and build
-COPY artifacts/mockup-sandbox/src ./src
-COPY artifacts/mockup-sandbox/index.html ./
-COPY artifacts/mockup-sandbox/vite.config.ts ./
-COPY artifacts/mockup-sandbox/tsconfig.json ./
-COPY artifacts/mockup-sandbox/components.json ./
-COPY artifacts/mockup-sandbox/mockupPreviewPlugin.ts ./
-
-# Build
-RUN pnpm run build
+    pnpm install && \
+    pnpm --filter @workspace/mockup-sandbox run build
 
 # Runner stage
 FROM node:22-alpine AS runner
