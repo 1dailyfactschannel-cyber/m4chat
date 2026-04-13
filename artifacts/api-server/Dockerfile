@@ -1,15 +1,13 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy all project files
+# Copy entire project
 COPY . .
 
-# Install all dependencies
+# Try to install and build
 RUN npm install -g pnpm && \
-    pnpm install
-
-# Build only api-server
-RUN pnpm --filter @workspace/api-server run build
+    pnpm install && \
+    pnpm run build
 
 # Runner stage
 FROM node:22-alpine AS runner
