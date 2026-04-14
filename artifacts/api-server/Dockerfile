@@ -2,7 +2,7 @@ FROM node:22-alpine
 
 WORKDIR /app
 
-# Copy package files for libs
+# Copy lib dependencies
 COPY lib/db/package.json ./lib/db/package.json
 COPY lib/api-zod/package.json ./lib/api-zod/package.json
 
@@ -17,11 +17,11 @@ RUN cd artifacts/api-server && \
     sed -i 's/"@workspace\/db": "workspace:\*"/"\.\.\/lib\/db"/g' package.json && \
     sed -i 's/"@workspace\/api-zod": "workspace:\*"/"\.\.\/lib\/api-zod"/g' package.json
 
-# Install and build - use --ignore-scripts flag
+# Install and build
 WORKDIR /app/artifacts/api-server
-RUN npm install --ignore-scripts --include=dev && npm run build
+RUN npm install --ignore-scripts && npm run build
 
-# Runner
+# Runner stage
 FROM node:22-alpine
 WORKDIR /app
 ENV NODE_ENV=production
