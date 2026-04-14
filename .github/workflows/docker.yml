@@ -21,6 +21,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: artifacts/mockup-sandbox/package-lock.json
+
+      - name: Verify Node.js
+        run: |
+          node --version
+          npm --version
+          which node
+          which npm
 
       - name: Build frontend locally
         run: |
