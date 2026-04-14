@@ -23,11 +23,6 @@ Thumbs.db
 .git
 .gitignore
 
-# Docker
-docker-compose.yml
-Dockerfile
-.dockerignore
-
 # Logs
 *.log
 npm-debug.log*
@@ -45,3 +40,7 @@ README.md
 tmp
 temp
 *.tmp
+
+# Workspace root files (not needed for individual builds)
+pnpm-workspace.yaml
+tsconfig.base.json
