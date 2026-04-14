@@ -8,25 +8,37 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     permissions:
       contents: read
       packages: write
-    
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
+      - name: Build frontend locally
+        run: |
+          cd artifacts/mockup-sandbox
+          npm install
+          npm run build
+
+      - name: Build api-server locally
+        run: |
+          cd artifacts/api-server
+          npm install --ignore-scripts
+          npm run build
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      
+
       - name: Build and push frontend
         uses: docker/build-push-action@v5
         with:
@@ -34,21 +46,13 @@ jobs:
           file: ./artifacts/mockup-sandbox/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository }}/frontend:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
-          outputs: type=local,dest=/tmp/buildx-output
-          
-      - name: Show build output
-        run: |
-          ls -la /tmp/buildx-output/
-      
+          no-cache: true
+
       - name: Build and push api-server
-        if: false # Skip for now
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./artifacts/api-server/Dockerfile
           push: true
           tags: ghcr.io/${{ github.repository }}/api-server:latest
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          no-cache: true
