@@ -1,8 +1,5 @@
 {
-  "version": 2,
-  "root": "artifacts/mockup-sandbox",
   "buildCommand": "npm install && npm run build",
   "outputDirectory": "dist",
-  "installCommand": "npm install",
   "framework": null
 }
