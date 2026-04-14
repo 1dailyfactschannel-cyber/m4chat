@@ -14,7 +14,6 @@ COPY artifacts/mockup-sandbox/index.html ./
 COPY artifacts/mockup-sandbox/vite.config.ts ./
 COPY artifacts/mockup-sandbox/tsconfig.json ./
 COPY artifacts/mockup-sandbox/components.json ./
-COPY artifacts/mockup-sandbox/mockupPreviewPlugin.ts ./
 
 # Build using npx directly
 RUN npx vite build
