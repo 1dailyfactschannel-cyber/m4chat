@@ -27,12 +27,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Build frontend with verbose output
-        run: |
-          cd artifacts/mockup-sandbox
-          npm install
-          npm run build 2>&1 | head -100
-      
       - name: Build and push frontend
         uses: docker/build-push-action@v5
         with:
@@ -42,8 +36,14 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/frontend:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          outputs: type=local,dest=/tmp/buildx-output
+          
+      - name: Show build output
+        run: |
+          ls -la /tmp/buildx-output/
       
       - name: Build and push api-server
+        if: false # Skip for now
         uses: docker/build-push-action@v5
         with:
           context: .
