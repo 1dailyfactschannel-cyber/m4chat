@@ -5,8 +5,9 @@ WORKDIR /app
 # Copy package files
 COPY artifacts/mockup-sandbox/package.json ./
 
-# Install dependencies
-RUN npm install --include=dev
+# Install dependencies - ignore scripts (husky causes issues)
+RUN npm config set ignore-scripts true && \
+    npm install --include=dev
 
 # Copy source
 COPY artifacts/mockup-sandbox/src ./src
