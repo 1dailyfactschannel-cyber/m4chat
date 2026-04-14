@@ -1,27 +1,24 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy root config
-COPY package.json pnpm-workspace.yaml ./
-
-# Copy libs
-COPY lib/db ./lib/db
-COPY lib/api-zod ./lib/api-zod
-
-# Copy api-server
+# Copy all source files
 COPY artifacts/api-server/package.json ./artifacts/api-server/
 COPY artifacts/api-server/tsconfig.json ./artifacts/api-server/
 COPY artifacts/api-server/build.mjs ./artifacts/api-server/
 COPY artifacts/api-server/src ./artifacts/api-server/src
 
-# Fix workspace references to local paths
-RUN sed -i 's/"@workspace\/db": "workspace:\*"/".\/..\/lib\/db"/g' artifacts/api-server/package.json && \
-    sed -i 's/"@workspace\/api-zod": "workspace:\*"/".\/..\/lib\/api-zod"/g' artifacts/api-server/package.json
+# Copy lib dependencies that api-server needs
+COPY lib/db ./lib/db
+COPY lib/api-zod ./lib/api-zod
 
-WORKDIR /app/artifacts/api-server
+# Replace workspace references with relative paths
+RUN cd artifacts/api-server && \
+    sed -i 's/"@workspace\/db": "workspace:\*"/"\.\.\/lib\/db"/g' package.json && \
+    sed -i 's/"@workspace\/api-zod": "workspace:\*"/"\.\.\/lib\/api-zod"/g' package.json
 
 # Install and build
-RUN npm install && npm run build
+WORKDIR /app/artifacts/api-server
+RUN npm install --include=dev && npm run build
 
 # Runner stage
 FROM node:22-alpine AS runner

@@ -1,14 +1,14 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy only mockup-sandbox files
+# Copy mockup-sandbox files
 COPY artifacts/mockup-sandbox/package.json ./
 COPY artifacts/mockup-sandbox/tsconfig.json ./
 COPY artifacts/mockup-sandbox/vite.config.ts ./
 COPY artifacts/mockup-sandbox/index.html ./
 COPY artifacts/mockup-sandbox/src ./src
 
-# Install with npm (include devDependencies for build)
+# Install dependencies (include dev for build)
 RUN npm install --include=dev
 
 # Build
