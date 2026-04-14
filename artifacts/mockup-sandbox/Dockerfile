@@ -8,8 +8,8 @@ COPY artifacts/mockup-sandbox/vite.config.ts ./
 COPY artifacts/mockup-sandbox/index.html ./
 COPY artifacts/mockup-sandbox/src ./src
 
-# Install with npm (no workspace)
-RUN npm install
+# Install with npm (include devDependencies for build)
+RUN npm install --include=dev
 
 # Build
 RUN npm run build

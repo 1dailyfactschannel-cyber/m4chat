@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: artifacts/mockup-sandbox/Dockerfile
-    image: m4chat-frontend:latest
     container_name: m4chat-frontend
     environment:
       - NODE_ENV=production
