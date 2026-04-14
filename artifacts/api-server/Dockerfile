@@ -17,11 +17,9 @@ RUN cd artifacts/api-server && \
     sed -i 's/"@workspace\/db": "workspace:\*"/"\.\.\/lib\/db"/g' package.json && \
     sed -i 's/"@workspace\/api-zod": "workspace:\*"/"\.\.\/lib\/api-zod"/g' package.json
 
-# Install and build - ignore scripts
+# Install and build - use --ignore-scripts flag
 WORKDIR /app/artifacts/api-server
-RUN npm config set ignore-scripts true && \
-    npm install --include=dev && \
-    npm run build
+RUN npm install --ignore-scripts --include=dev && npm run build
 
 # Runner
 FROM node:22-alpine
