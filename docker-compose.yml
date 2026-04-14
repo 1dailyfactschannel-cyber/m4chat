@@ -17,10 +17,9 @@ services:
       retries: 5
 
   api-server:
-    build:
-      context: .
-      dockerfile: artifacts/api-server/Dockerfile
+    image: ghcr.io/1dailyfactschannel-cyber/m4chat/api-server:latest
     container_name: m4chat-api
+    pull_policy: always
     environment:
       - NODE_ENV=production
       - PORT=3001
@@ -33,10 +32,9 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: .
-      dockerfile: artifacts/mockup-sandbox/Dockerfile
+    image: ghcr.io/1dailyfactschannel-cyber/m4chat/frontend:latest
     container_name: m4chat-frontend
+    pull_policy: always
     environment:
       - NODE_ENV=production
       - PORT=8081
