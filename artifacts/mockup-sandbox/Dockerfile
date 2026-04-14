@@ -5,7 +5,7 @@ WORKDIR /app
 # Copy package files
 COPY artifacts/mockup-sandbox/package.json ./
 
-# Install dependencies (including devDependencies for build)
+# Install dependencies
 RUN npm install
 
 # Copy source files
@@ -15,8 +15,8 @@ COPY artifacts/mockup-sandbox/vite.config.ts ./
 COPY artifacts/mockup-sandbox/tsconfig.json ./
 COPY artifacts/mockup-sandbox/components.json ./
 
-# Build using local vite binary
-RUN ./node_modules/.bin/vite build
+# Build using node directly
+RUN node node_modules/vite/bin/vite.js build
 
 # Runner stage
 FROM node:22-alpine
