@@ -1,22 +1,18 @@
 FROM node:22-alpine AS builder
 WORKDIR /app
 
-# Copy package files first for caching
+# Copy only mockup-sandbox files
 COPY artifacts/mockup-sandbox/package.json ./
-
-# Install dependencies
-RUN npm install -g pnpm && pnpm install
-
-# Copy source and configs
-COPY artifacts/mockup-sandbox/src ./src
-COPY artifacts/mockup-sandbox/index.html ./
-COPY artifacts/mockup-sandbox/vite.config.ts ./
 COPY artifacts/mockup-sandbox/tsconfig.json ./
-COPY artifacts/mockup-sandbox/components.json ./
-COPY artifacts/mockup-sandbox/mockupPreviewPlugin.ts ./
+COPY artifacts/mockup-sandbox/vite.config.ts ./
+COPY artifacts/mockup-sandbox/index.html ./
+COPY artifacts/mockup-sandbox/src ./src
+
+# Install with npm (no workspace)
+RUN npm install
 
 # Build
-RUN pnpm run build
+RUN npm run build
 
 # Runner stage
 FROM node:22-alpine AS runner
