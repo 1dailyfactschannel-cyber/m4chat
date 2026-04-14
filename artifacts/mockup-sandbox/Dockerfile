@@ -16,8 +16,8 @@ COPY artifacts/mockup-sandbox/tsconfig.json ./
 COPY artifacts/mockup-sandbox/components.json ./
 COPY artifacts/mockup-sandbox/mockupPreviewPlugin.ts ./
 
-# Build
-RUN npm run build
+# Build using npx directly
+RUN npx vite build
 
 # Runner stage
 FROM node:22-alpine
